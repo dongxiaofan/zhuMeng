@@ -1,0 +1,72 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path" : "pages/home/home",
+			"style" : 
+			{
+				"navigationBarTitleText" : "首页"
+			}
+		},
+		{
+			"path" : "pages/examine/examine",
+			"style" : 
+			{
+				"navigationBarTitleText" : "考核管理"
+			}
+		},
+		{
+			"path" : "pages/points/points",
+			"style" : 
+			{
+				"navigationBarTitleText" : "积分超市"
+			}
+		},
+		{
+			"path" : "pages/mine/mine",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {},
+	"tabBar": {
+		"color": "#909399",
+		"selectedColor": "#1296db",
+		"borderStyle": "white",
+		"backgroundColor": "#fff",
+		"fontSize": "14px",
+		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"text": "首页",
+				"iconPath": "static/images/tabBar/shouye.png",
+				"selectedIconPath": "static/images/tabBar/shouye_a.png"
+			},
+			{
+				"pagePath": "pages/examine/examine",
+				"text": "考核管理",
+				"iconPath": "static/images/tabBar/kaohe.png",
+				"selectedIconPath": "static/images/tabBar/kaohe_a.png"
+			},
+			{
+				"pagePath": "pages/points/points",
+				"text": "积分超市",
+				"iconPath": "static/images/tabBar/jifen.png",
+				"selectedIconPath": "static/images/tabBar/jifen_a.png"
+			},
+			{
+				"pagePath": "pages/mine/mine",
+				"text": "我的",
+				"iconPath": "static/images/tabBar/wode.png",
+				"selectedIconPath": "static/images/tabBar/wode_a.png"
+			}
+		]
+	}
+}
