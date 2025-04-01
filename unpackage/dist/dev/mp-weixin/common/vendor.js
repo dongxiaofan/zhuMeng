@@ -68,8 +68,8 @@ const capitalize = cacheStringFunction((str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 });
 const toHandlerKey = cacheStringFunction((str) => {
-  const s = str ? `on${capitalize(str)}` : ``;
-  return s;
+  const s2 = str ? `on${capitalize(str)}` : ``;
+  return s2;
 });
 const hasChanged = (value, oldValue) => !Object.is(value, oldValue);
 const invokeArrayFns$1 = (fns, arg) => {
@@ -88,6 +88,36 @@ const looseToNumber = (val) => {
   const n2 = parseFloat(val);
   return isNaN(n2) ? val : n2;
 };
+function normalizeStyle(value) {
+  if (isArray(value)) {
+    const res = {};
+    for (let i = 0; i < value.length; i++) {
+      const item = value[i];
+      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
+      if (normalized) {
+        for (const key in normalized) {
+          res[key] = normalized[key];
+        }
+      }
+    }
+    return res;
+  } else if (isString(value) || isObject(value)) {
+    return value;
+  }
+}
+const listDelimiterRE = /;(?![^(]*\))/g;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*[^]*?\*\//g;
+function parseStringStyle(cssText) {
+  const ret = {};
+  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
+    if (item) {
+      const tmp = item.split(propertyDelimiterRE);
+      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+    }
+  });
+  return ret;
+}
 function normalizeClass(value) {
   let res = "";
   if (isString(value)) {
@@ -374,8 +404,8 @@ const E = function() {
 E.prototype = {
   _id: 1,
   on: function(name, callback, ctx) {
-    var e = this.e || (this.e = {});
-    (e[name] || (e[name] = [])).push({
+    var e2 = this.e || (this.e = {});
+    (e2[name] || (e2[name] = [])).push({
       fn: callback,
       ctx,
       _id: this._id
@@ -402,8 +432,8 @@ E.prototype = {
     return this;
   },
   off: function(name, event) {
-    var e = this.e || (this.e = {});
-    var evts = e[name];
+    var e2 = this.e || (this.e = {});
+    var evts = e2[name];
     var liveEvents = [];
     if (evts && event) {
       for (var i = evts.length - 1; i >= 0; i--) {
@@ -414,7 +444,7 @@ E.prototype = {
       }
       liveEvents = evts;
     }
-    liveEvents.length ? e[name] = liveEvents : delete e[name];
+    liveEvents.length ? e2[name] = liveEvents : delete e2[name];
     return this;
   }
 };
@@ -2570,21 +2600,21 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     );
   }
 }
-const createHook = (lifecycle) => (hook, target = currentInstance) => (
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
 );
-const onBeforeMount = createHook("bm");
-const onMounted = createHook("m");
-const onBeforeUpdate = createHook("bu");
-const onUpdated = createHook("u");
-const onBeforeUnmount = createHook("bum");
-const onUnmounted = createHook("um");
-const onServerPrefetch = createHook("sp");
-const onRenderTriggered = createHook(
+const onBeforeMount = createHook$1("bm");
+const onMounted = createHook$1("m");
+const onBeforeUpdate = createHook$1("bu");
+const onUpdated = createHook$1("u");
+const onBeforeUnmount = createHook$1("bum");
+const onUnmounted = createHook$1("um");
+const onServerPrefetch = createHook$1("sp");
+const onRenderTriggered = createHook$1(
   "rtg"
 );
-const onRenderTracked = createHook(
+const onRenderTracked = createHook$1(
   "rtc"
 );
 function onErrorCaptured(hook, target = currentInstance) {
@@ -4982,6 +5012,22 @@ function getCreateApp() {
     return my[method];
   }
 }
+function stringifyStyle(value) {
+  if (isString(value)) {
+    return value;
+  }
+  return stringify(normalizeStyle(value));
+}
+function stringify(styles) {
+  let ret = "";
+  if (!styles || isString(styles)) {
+    return ret;
+  }
+  for (const key in styles) {
+    ret += `${key.startsWith(`--`) ? key : hyphenate(key)}:${styles[key]};`;
+  }
+  return ret;
+}
 function vOn(value, key) {
   const instance = getCurrentInstance();
   const ctx = instance.ctx;
@@ -5110,6 +5156,8 @@ function vFor(source, renderItem) {
 }
 const o = (value, key) => vOn(value, key);
 const f = (source, renderItem) => vFor(source, renderItem);
+const s = (value) => stringifyStyle(value);
+const e = (target, ...sources) => extend(target, ...sources);
 const n = (value) => normalizeClass(value);
 const t = (val) => toDisplayString(val);
 function createApp$1(rootComponent, rootProps = null) {
@@ -5249,8 +5297,8 @@ function tryCatch(fn) {
   return function() {
     try {
       return fn.apply(fn, arguments);
-    } catch (e) {
-      console.error(e);
+    } catch (e2) {
+      console.error(e2);
     }
   };
 }
@@ -5708,7 +5756,7 @@ let enabled;
 function normalizePushMessage(message) {
   try {
     return JSON.parse(message);
-  } catch (e) {
+  } catch (e2) {
   }
   return message;
 }
@@ -6433,15 +6481,15 @@ function tryConnectSocket(host2, port, id) {
       });
       resolve(null);
     }, SOCKET_TIMEOUT);
-    socket.onOpen((e) => {
+    socket.onOpen((e2) => {
       clearTimeout(timer);
       resolve(socket);
     });
-    socket.onClose((e) => {
+    socket.onClose((e2) => {
       clearTimeout(timer);
       resolve(null);
     });
-    socket.onError((e) => {
+    socket.onError((e2) => {
       clearTimeout(timer);
       resolve(null);
     });
@@ -6453,7 +6501,7 @@ function formatMessage(type, args) {
       type,
       args: formatArgs(args)
     };
-  } catch (e) {
+  } catch (e2) {
   }
   return {
     type,
@@ -7814,14 +7862,25 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createPluginApp = global.createPluginApp = createPluginApp;
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
+const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
+  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
+};
+const onPageScroll = /* @__PURE__ */ createHook(ON_PAGE_SCROLL);
+const onReachBottom = /* @__PURE__ */ createHook(ON_REACH_BOTTOM);
+const onPullDownRefresh = /* @__PURE__ */ createHook(ON_PULL_DOWN_REFRESH);
 exports._export_sfc = _export_sfc;
 exports.createSSRApp = createSSRApp;
+exports.e = e;
 exports.f = f;
 exports.index = index;
 exports.n = n;
 exports.o = o;
+exports.onPageScroll = onPageScroll;
+exports.onPullDownRefresh = onPullDownRefresh;
+exports.onReachBottom = onReachBottom;
 exports.reactive = reactive;
 exports.ref = ref;
+exports.s = s;
 exports.t = t;
 exports.unref = unref;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

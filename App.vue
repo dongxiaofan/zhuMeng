@@ -14,6 +14,7 @@
 
 <style>
 	@import "@/static/fonts/iconfont.css";
+	@import "@/static/styles/public.scss";
 	/*每个页面公共css */
 	page{
 		background: #fbfbfb;
