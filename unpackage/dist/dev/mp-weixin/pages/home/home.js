@@ -5,6 +5,14 @@ const _sfc_main = {
   setup(__props) {
     let scrollTop = common_vendor.ref(0);
     let showMask = common_vendor.ref(false);
+    common_vendor.ref(null);
+    const myElement = common_vendor.ref(null);
+    common_vendor.onMounted(() => {
+      common_vendor.index.__f__("log", "at pages/home/home.vue:75", "myElement: ", myElement);
+    });
+    const getTop = () => {
+      common_vendor.index.__f__("log", "at pages/home/home.vue:83", "myElement: ", myElement.value.$el);
+    };
     let typeTabList = common_vendor.reactive([
       { text: "首页", key: 0 },
       { text: "公路养护", key: 1 },
@@ -40,15 +48,18 @@ const _sfc_main = {
       { name: "item_10.jpg", title: "桥梁顶升与支座更换风险提示", pros: 0, cont: "桥梁顶升与支座更换风险提示" }
     ]);
     common_vendor.onPullDownRefresh(() => {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:101", "下拉刷新整个页面");
+      common_vendor.index.__f__("log", "at pages/home/home.vue:116", "下拉刷新整个页面");
       videoList.value = videoList.value.slice(0, 10);
     });
     common_vendor.onReachBottom(() => {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:107", "触底了");
+      common_vendor.index.__f__("log", "at pages/home/home.vue:122", "触底了");
       if (videoList.value.length <= 100) {
-        common_vendor.index.__f__("log", "at pages/home/home.vue:109", "数据复制");
+        common_vendor.index.__f__("log", "at pages/home/home.vue:124", "数据复制");
         videoList.value = [...videoList.value, ...videoList.value];
       }
+    });
+    common_vendor.onReady(() => {
+      common_vendor.index.__f__("log", "at pages/home/home.vue:130", "2 myElement: ", myElement);
     });
     common_vendor.onPageScroll((e) => {
       scrollTop.value = e.scrollTop;
@@ -70,13 +81,14 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.unref(showMask)
+        a: common_vendor.o(getTop),
+        b: common_vendor.unref(showMask)
       }, common_vendor.unref(showMask) ? {} : {}, {
-        b: common_vendor.unref(scrollTop) > 600
+        c: common_vendor.unref(scrollTop) > 600
       }, common_vendor.unref(scrollTop) > 600 ? {
-        c: common_vendor.o(scrollToTop)
+        d: common_vendor.o(scrollToTop)
       } : {}, {
-        d: common_vendor.f(common_vendor.unref(typeTabList), (type, index, i0) => {
+        e: common_vendor.f(common_vendor.unref(typeTabList), (type, index, i0) => {
           return {
             a: common_vendor.t(type.text),
             b: index,
@@ -84,19 +96,19 @@ const _sfc_main = {
             d: common_vendor.o(($event) => typeBarClick(index), index)
           };
         }),
-        e: common_vendor.o(($event) => chooseType()),
-        f: common_vendor.unref(showMask)
+        f: common_vendor.o(($event) => chooseType()),
+        g: common_vendor.unref(showMask)
       }, common_vendor.unref(showMask) ? {
-        g: common_vendor.o(($event) => chooseTypeOk()),
-        h: common_vendor.o(($event) => chooseTypeOk())
+        h: common_vendor.o(($event) => chooseTypeOk()),
+        i: common_vendor.o(($event) => chooseTypeOk())
       } : {}, {
-        i: common_vendor.f(common_vendor.unref(swiperList), (img, index, i0) => {
+        j: common_vendor.f(common_vendor.unref(swiperList), (img, index, i0) => {
           return {
             a: "/static/images/home_swiper/" + img.name + ".png",
             b: index
           };
         }),
-        j: common_vendor.f(common_vendor.unref(videoList), (item, index, i0) => {
+        k: common_vendor.f(common_vendor.unref(videoList), (item, index, i0) => {
           return common_vendor.e({
             a: "/static/images/home_video_list/" + item.name,
             b: common_vendor.t(item.title),
@@ -111,7 +123,7 @@ const _sfc_main = {
             h: index
           });
         }),
-        k: common_vendor.s(common_vendor.unref(showMask) ? {
+        l: common_vendor.s(common_vendor.unref(showMask) ? {
           "height": "100vh",
           "overflow": "hidden"
         } : {

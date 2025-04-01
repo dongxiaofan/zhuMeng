@@ -1,5 +1,6 @@
 <template>	
-	<view class="globa-mask" style="height: 100%;" v-if="showMask"></view>
+	<view class="" @click="getTop">获取距离</view>
+	<view class="fenlei-mask" style="height: 100%;" v-if="showMask"></view>
 	<scroll-view scroll-y="true" :style="showMask ? {'height': '100vh', 'overflow': 'hidden'} : {'height': '100%', 'overflow': 'auto'} ">
 		
 		<view class="home-wrap">
@@ -14,7 +15,7 @@
 			</view>
 			
 			<!-- 菜单 -->
-			<view class="home-top-menu">
+			<view class="home-top-menu" ref="homeTopMenuRef">
 				<scroll-view scroll-x="true" class="type-bar">
 					<view v-for="(type, index) in typeTabList" :key="index" :class="'type-item ' + (currentTypeIndex==index ? 'active' : '')" @click="typeBarClick(index)">
 						<text class="type-text">{{ type.text }}</text>
@@ -30,7 +31,7 @@
 			</view>
 			
 			<!-- 轮播 -->
-			<view class="home-swiper">
+			<view class="home-swiper" ref="myElement">
 				<swiper class="swiper" circular indicator-dots="true" autoplay interval="2000" duration="500" style="height: 200px;">
 					<swiper-item v-for="(img,index) of swiperList" :key="index">
 						<view class="swiper-item">
@@ -63,11 +64,25 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-import { onReachBottom, onPullDownRefresh, onPageScroll } from "@dcloudio/uni-app";
+import { ref, reactive, onMounted } from 'vue';
+import { onReachBottom, onPullDownRefresh, onPageScroll, onReady } from "@dcloudio/uni-app";
 
 let scrollTop = ref(0);
-let showMask = ref(false)
+let showMask = ref(false);
+const homeTopMenuRef = ref(null);
+const myElement = ref(null)
+onMounted(() => {
+	console.log('myElement: ', myElement)
+	// setTimeout()
+	
+});
+
+const getTop = () => {
+	// console.log('homeTopMenuRef: ', homeTopMenuRef.value.getBoundingClientRect())
+	// console.log('homeTopMenuRef: ', homeTopMenuRef)
+	console.log('myElement: ', myElement.value.$el)
+}
+
 let typeTabList = reactive([
 	{ text: '首页', key: 0 },	{ text: '公路养护', key: 1 },	{ text: '风险提示', key: 2 },	{ text: '作业要点', key: 3 },	{ text: '平安工地', key: 4 },	{ text: '技术交流', key: 5 },	{ text: '三卡学习', key: 6 },	{ text: '三级安全教育', key: 7 },	{ text: '作业指导书', key: 8 },	{ text: '技能学习',key: 9 },
 ]);
@@ -109,6 +124,10 @@ onReachBottom(() => {
 		console.log('数据复制')
 		videoList.value = [...videoList.value, ...videoList.value]
 	}
+})
+
+onReady(() => {
+	console.log('2 myElement: ', myElement)
 })
 
 // 滚动监听
@@ -249,6 +268,14 @@ const chooseTypeOk = () => {
 			text-align: center;
 		}
 	}
+}
+.fenlei-mask{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.4);
+	z-index: 9;
+	left: 0;
 }
 .home-swiper{
 	width: calc(100% - 20px);

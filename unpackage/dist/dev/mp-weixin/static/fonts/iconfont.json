@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "666888",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "2674474",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "3522455",
+      "name": "目录",
+      "font_class": "mulu",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "5387839",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "eb6c",
+      "unicode_decimal": 60268
+    },
+    {
+      "icon_id": "6500633",
+      "name": "课程",
+      "font_class": "kecheng",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "25610388",
+      "name": "修改客户名称",
+      "font_class": "xiugaikehumingcheng",
+      "unicode": "e715",
+      "unicode_decimal": 59157
+    },
+    {
+      "icon_id": "1220305",
+      "name": "个人资料",
+      "font_class": "gerenziliao",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "8288873",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e851",
+      "unicode_decimal": 59473
+    },
+    {
+      "icon_id": "9554857",
+      "name": "默认头像",
+      "font_class": "morentouxiang",
+      "unicode": "e71a",
+      "unicode_decimal": 59162
+    },
+    {
       "icon_id": "6129105",
       "name": "回到顶部",
       "font_class": "huidaodingbu",
