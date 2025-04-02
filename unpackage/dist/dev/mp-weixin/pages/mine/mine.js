@@ -77,10 +77,19 @@ const _sfc_main = {
       let systemInfo = common_vendor.index.getSystemInfoSync();
       common_vendor.index.__f__("log", "at pages/mine/mine.vue:154", "~~~~~~~~~~~~~~~~~~~~~ systemInfo: ", systemInfo, ",  env: ", systemInfo.hostName);
       hostName.value = systemInfo.hostName;
+    });
+    common_vendor.onLoad(() => {
+      common_vendor.index.__f__("log", "at pages/mine/mine.vue:164", "~~~~~~~~~~~ onLoad");
+    });
+    common_vendor.onShow(() => {
+      common_vendor.index.__f__("log", "at pages/mine/mine.vue:167", "~~~~~~~~~~~ onShow");
+    });
+    common_vendor.onReady(() => {
+      common_vendor.index.__f__("log", "at pages/mine/mine.vue:170", "~~~~~~~~~~~ onReady");
       setTimeout(() => {
-        common_vendor.index.__f__("log", "at pages/mine/mine.vue:157", "barChartRef: ", barChartRef);
+        common_vendor.index.__f__("log", "at pages/mine/mine.vue:172", "barChartRef: ", barChartRef);
         initChart_mini();
-      }, 1e3);
+      }, 400);
     });
     return (_ctx, _cache) => {
       return common_vendor.e({

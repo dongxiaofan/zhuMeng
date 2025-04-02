@@ -9,6 +9,12 @@ const _sfc_main = {
       { title: "边坡小塌方、开裂和沉陷处理", status: 0 },
       { title: "死亡事故上报及处理方法", status: 1 },
       { title: "护栏更换作业要点", status: 0 },
+      { title: "伸缩装置安装作业要点", status: 0 },
+      { title: "高速公路养护作业控制区最小长度规定高速公路养护作业控制区最小长度规定", status: 0 },
+      { title: "高速公路设施清洗", status: 0 },
+      { title: "边坡小塌方、开裂和沉陷处理", status: 0 },
+      { title: "死亡事故上报及处理方法", status: 1 },
+      { title: "护栏更换作业要点", status: 0 },
       { title: "伸缩装置安装作业要点", status: 0 }
     ]);
     return (_ctx, _cache) => {

@@ -70,7 +70,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import { onReachBottom, onPullDownRefresh, onPageScroll, onReady } from "@dcloudio/uni-app";
+import { onReachBottom, onPullDownRefresh, onPageScroll, onLoad, onShow, onReady } from "@dcloudio/uni-app";
 // import * as echarts from "echarts"; // echarts_h5
 import lEchart from '../../uni_modules/lime-echart/components/l-echart/l-echart.vue' // echarts_mini
 const echarts = require('../../uni_modules/lime-echart/static/echarts.min.js'); // echarts_mini
@@ -153,12 +153,26 @@ onMounted(() => {
 	let systemInfo = uni.getSystemInfoSync();
 	console.log('~~~~~~~~~~~~~~~~~~~~~ systemInfo: ', systemInfo, ',  env: ', systemInfo.hostName)
 	hostName.value = systemInfo.hostName;
+	// setTimeout(() => {
+	// 	console.log('barChartRef: ', barChartRef)
+	// 	initChart_mini()
+	// }, 1000)
+	
+});
+
+onLoad(() => {
+	console.log('~~~~~~~~~~~ onLoad')
+})
+onShow(() => {
+	console.log('~~~~~~~~~~~ onShow')
+})
+onReady(() => {
+	console.log('~~~~~~~~~~~ onReady')
 	setTimeout(() => {
 		console.log('barChartRef: ', barChartRef)
 		initChart_mini()
-	}, 1000)
-	
-});
+	}, 400)
+})
 </script>
 
 <style lang="less">
