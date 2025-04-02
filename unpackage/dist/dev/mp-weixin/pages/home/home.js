@@ -62,13 +62,13 @@ const _sfc_main = {
       { name: "item_01.jpg", title: "桥梁顶升与支座更换风险提示", pros: 0, cont: "桥梁顶升与支座更换风险提示" }
     ]);
     common_vendor.onPullDownRefresh(() => {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:136", "下拉刷新整个页面");
+      common_vendor.index.__f__("log", "at pages/home/home.vue:137", "下拉刷新整个页面");
       videoList.value = videoList.value.slice(0, 10);
     });
     common_vendor.onReachBottom(() => {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:142", "触底了");
+      common_vendor.index.__f__("log", "at pages/home/home.vue:143", "触底了");
       if (videoList.value.length <= 100) {
-        common_vendor.index.__f__("log", "at pages/home/home.vue:144", "数据复制");
+        common_vendor.index.__f__("log", "at pages/home/home.vue:145", "数据复制");
         videoList.value = [...videoList.value, ...videoList.value];
       }
     });

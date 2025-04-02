@@ -152,7 +152,7 @@ let videoList = ref([
 			color: #999;
 		}
 		.mulu-item-txt{
-			width: 80%;
+			width: 74%;
 			font-size: 12px;
 			color: #666;
 			display: -webkit-box;
@@ -163,7 +163,7 @@ let videoList = ref([
 			padding-right: 10px;
 		}
 		.mulu-item-status{
-			width: 14%;
+			width: 20%;
 			display: inline-block;
 			font-size: 12px;
 			text-align: right;

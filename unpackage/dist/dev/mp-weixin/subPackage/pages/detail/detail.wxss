@@ -102,7 +102,7 @@
   color: #999;
 }
 .class-title-mulu-list .mulu-item .mulu-item-txt {
-  width: 80%;
+  width: 74%;
   font-size: 12px;
   color: #666;
   display: -webkit-box;
@@ -113,7 +113,7 @@
   padding-right: 10px;
 }
 .class-title-mulu-list .mulu-item .mulu-item-status {
-  width: 14%;
+  width: 20%;
   display: inline-block;
   font-size: 12px;
   text-align: right;

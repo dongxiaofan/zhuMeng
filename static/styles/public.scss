@@ -1,3 +1,7 @@
+page{
+	max-width: 430px;
+}
+
 .globa-mask{
 	width: 100%;
 	height: 100%;
@@ -6,20 +10,4 @@
 	z-index: 9;
 	left: 0;
 	top: 0;
-}
-
-.text-primary{
-	color: $uni-color-primary;
-}
-.text-success{
-	color: $uni-color-success;
-}
-.text-warning{
-	color: $uni-color-warning;
-}
-.text-error{
-	color: $uni-color-error;
-}
-.text-grey{
-	color: $uni-text-color-grey;
 }

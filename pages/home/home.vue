@@ -46,6 +46,7 @@
 				</swiper>
 			</view>
 
+			<view class="clearfix"></view>
 			<!-- 视频列表 -->
 			<view class="home-list">
 				<view class="home-list-item" v-for="(item,index) of videoList" :key="index" @click="goDetail()">
@@ -461,6 +462,13 @@ const goDetail = () => {
 			padding: 2px 5px;
 			letter-spacing: 1px;
 		}
+	}
+}
+.clearfix{
+	&::after{
+		content: "";
+		display: block;
+		clear: both;
 	}
 }
 </style>

@@ -60,6 +60,8 @@ const muluList = reactive([
 	padding: 10px;
 	box-sizing: border-box;
 	.mulu-item{
+		height: 20px;
+		line-height: 20px;
 		display: flex;
 		position: relative;
 		margin-bottom: 10px;
@@ -69,12 +71,12 @@ const muluList = reactive([
 			border-bottom: 0;
 		}
 		.iconfont{
-			width: 6%;
+			width: 8%;
 			display: inline-block;
 			// color: #999;
 		}
 		.mulu-item-txt{
-			width: 80%;
+			width: 70%;
 			font-size: 12px;
 			color: #666;
 			display: -webkit-box;
@@ -85,7 +87,7 @@ const muluList = reactive([
 			padding-right: 10px;
 		}
 		.mulu-item-status{
-			width: 14%;
+			width: 20%;
 			display: inline-block;
 			font-size: 12px;
 			text-align: right;
