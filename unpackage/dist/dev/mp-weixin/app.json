@@ -3,7 +3,8 @@
     "pages/home/home",
     "pages/examine/examine",
     "pages/points/points",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/detail/detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",

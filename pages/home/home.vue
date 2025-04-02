@@ -1,10 +1,9 @@
-<template>	
+<template>
 	<view class="home-wrap">
-		<!-- <view class="fenlei-mask" :style="{'height': (contHeight - menuOffsetTop) + 'px', 'top': menuFixed ? '0px' : menuOffsetTop + 'px'}" v-if="showMask"></view> -->
-		<!-- <view class="fenlei-mask" :style="{'height': '100%', 'top': menuOffsetTop + 'px'}" v-if="showMask" @click="showMask = false"></view> -->
-		<scroll-view scroll-y="true" :style="showMask ? {'height': '100vh', 'overflow': 'hidden'} : {'height': '100%', 'overflow': 'auto'} ">
-		
-			<view class="home-bacn-top" v-if="scrollTop > 600" @click="scrollToTop">
+		<view class="fenlei-mask" :style="{'height': contHeight + 'px', 'top': menuFixed ? '0px' : menuOffsetTop + 'px'}" v-if="showMask" @click="showMask = false"></view>
+		<scroll-view scroll-y="true">
+			<!-- 返回顶部 -->
+			<view class="home-bacn-top" :style="{opacity: (scrollTop - 400) + '%'}" v-if="scrollTop > 400" @click="scrollToTop">
 				<text class="iconfont icon-huidaodingbu" style="font-size: 20px;"></text>
 			</view>
 			<!-- 搜索 -->
@@ -15,23 +14,27 @@
 			</view>
 			
 			<!-- 菜单 -->
-			<view :style="{'height': menuHeight+'px'}" v-if="menuFixed"></view>
-			<!-- <view class="home-top-menu" :style="menuFixed ? {'position': 'fixed', 'top': '0', 'width': '100%',, 'background': '#fff'} : {}"> -->
+			<view class="" style="position: relative;" v-if="menuFixed">
+				<view :style="{'background': 'white', 'height': menuHeight+'px', 'opacity': scrollTop + '%'}"></view>
+				<view class="copy-mene-fixed" :style="{'opacity': (scrollTop - menuScrollTop)*3 + '%'}"></view>
+			</view>			
 			<view :class="menuFixed ? 'home-top-menu menu-fixed' : 'home-top-menu'">
 				<scroll-view scroll-x="true" class="type-bar">
 					<view v-for="(type, index) in typeTabList" :key="index" :class="'type-item ' + (currentTypeIndex==index ? 'active' : '')" @click="typeBarClick(index)">
 						<text class="type-text">{{ type.text }}</text>
 					</view>
 				</scroll-view>
-				<view class="fenlei" @click="chooseType()">
-					<text class="iconfont icon-fenlei" style="font-size: 24px;"></text>
-				</view>
-				<view class="fenlei-cont" v-if="showMask" >
-					<view class="fenlei-cont-item" @click="chooseTypeOk()">按状态分类</view>
-					<view class="fenlei-cont-item" @click="chooseTypeOk()">按名称分类</view>
+				<view class="fenlei-wrap">
+					<view class="fenlei" @click="chooseType()">
+						<text class="iconfont icon-fenlei" style="font-size: 24px;"></text>
+					</view>
+					<view class="fenlei-cont" v-if="showMask">
+						<view class="fenlei-cont-item" @click="chooseTypeOk()">按状态分类</view>
+						<view class="fenlei-cont-item" @click="chooseTypeOk()">按名称分类</view>
+					</view>
 				</view>
 			</view>
-			
+
 			<!-- 轮播 -->
 			<view class="home-swiper">
 				<swiper class="swiper" circular indicator-dots="true" autoplay interval="2000" duration="500" style="height: 200px;">
@@ -42,10 +45,10 @@
 					</swiper-item>
 				</swiper>
 			</view>
-			
+
 			<!-- 视频列表 -->
 			<view class="home-list">
-				<view class="home-list-item" v-for="(item,index) of videoList" :key="index">
+				<view class="home-list-item" v-for="(item,index) of videoList" :key="index" @click="goDetail()">
 					<view class="item-img">
 						<image :src="'/static/images/home_video_list/' + item.name" mode=""></image>
 					</view>
@@ -61,10 +64,7 @@
 					<view class="item-tag-red" v-if="item.isNew">最新</view>
 				</view>
 			</view>
-		
 		</scroll-view>
-	
-		<uni-popup ref="popup" type="top"></uni-popup>
 	</view>
 </template>
 
@@ -72,6 +72,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { onReachBottom, onPullDownRefresh, onPageScroll, onReady } from "@dcloudio/uni-app";
 
+let showPopup = ref(true)
 let scrollTop = ref(0); // 滚动条位置
 let screenHeight = ref(0); // 设备高度
 // let windowHeight = ref(0); // 页面高度
@@ -81,6 +82,8 @@ let menuScrollTop = ref(0);
 let menuHeight = ref(0);
 let menuFixed = ref(false);
 let showMask = ref(false);
+const gradientColor = ref('rgba(255, 255, 255, 0)'); // 初始背景色为透明
+
 onMounted(() => {
 	let query = uni.createSelectorQuery();
 	query.select('.home-top-menu').boundingClientRect(res => {
@@ -144,6 +147,7 @@ onReachBottom(() => {
 	}
 })
 
+
 // 滚动监听
 onPageScroll((e) => {
 	scrollTop.value = e.scrollTop;
@@ -154,6 +158,15 @@ onPageScroll((e) => {
 	} else {
 		menuFixed.value = false;
 	}
+	
+	// const scrollTop = e.scrollTop;
+ //    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+	// const gradientStartPoint = Math.min(Math.round(scrollTop / maxScroll * 100), 100); // 计算渐变起点百分比
+	// const gradientEndPoint = 100; // 渐变终点为100%
+	gradientColor.value = `rgba(0,0,0, ${e.scrollTop}%)`;
+	
+	// 滚动时
+	showMask.value = false;
 })
 
 // 返回顶部
@@ -164,16 +177,28 @@ const scrollToTop = () => {
 	})
 }
 
+// 选择类型做筛选
 const chooseType = () => {
 	showMask.value = true;
-	
+	// let query = uni.createSelectorQuery();
+	// query.select('.home-wrap').boundingClientRect(res => {
+	// 	contHeight.value = res.height
+	// }).exec();
 }
 
+// 选定类型
 const chooseTypeOk = () => {
 	showMask.value = false;
 	uni.showToast({
 		title: '已分类'
 	})
+}
+
+// 去详情
+const goDetail = () => {
+	uni.navigateTo({
+	  url: '/pages/detail/detail'
+	});
 }
 </script>
 
@@ -195,7 +220,7 @@ const chooseTypeOk = () => {
 	bottom: 10%;
 	z-index: 9;
 	border-radius: 100%;
-	transition: all .2s;
+	// transition: all .2s;
 }
 .home-search{
 	padding: 10px;
@@ -223,6 +248,15 @@ const chooseTypeOk = () => {
 		font-size: 14px;
 	}
 }
+.copy-mene-fixed{
+	width: 100%;
+	height: 44px;
+	position: fixed;
+	left: 0;
+	top: 0;
+	background-color: #007aff;
+	z-index: 9;
+}
 .home-top-menu{
 	padding: 10px 10px 0px 10px;
 	position: relative;
@@ -232,14 +266,26 @@ const chooseTypeOk = () => {
 		width: 100%;
 		top: 0;
 		left: 0;
-		background-color: #fbfbfb;
+		// background-color: #fbfbfb;
 		z-index: 9;
+		.type-bar{
+			.type-item{
+				color: #fff;
+				&.active{
+					color: #fff;
+					&:before{
+						background-color: #fff;
+					}
+				}
+			}
+		}
+		.fenlei{
+			color: #fff;
+		}
 	}
 	.type-bar {
 		display: flex;
 		flex-direction: row;
-		// padding: 10px 30px 10px 0;
-		border-radius: 10px;
 		margin: 0;
 		overflow-x: auto;
 		white-space: nowrap;

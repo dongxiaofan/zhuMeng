@@ -17,7 +17,7 @@
 		
 		<!-- menu -->
 		<view class="mine-menu">
-			<view class="mine-menu-item" v-for="(item, index) of menuList" :key="index">
+			<view class="mine-menu-item" v-for="(item, index) of menuList" :key="index" @click="globaTip()">
 				<text :class="'iconfont ' + item.icon"></text>
 				<view class="item-txt">{{item.txt}}</view>
 			</view>
@@ -38,25 +38,51 @@
 			</view>
 		</view>
 		
-		<!-- 个人资料 -->
-		<view class="mine-data">
-			
+		<!-- echarts -->
+		<view class="mine-echarts" id="mine_echarts" v-if="hostName !== 'WeChat'"></view>
+		<view class="mine-echarts" v-if="hostName == 'WeChat'">
+			<lEchart style="height:350rpx" ref="barChartRef"></lEchart>
 		</view>
 		
-		<!-- charts -->
-		<view class="mine-echarts" id="mine_echarts"></view>
-		<!-- <view style="width:750rpx; height:750rpx"><l-echart ref="chartRef"></l-echart></view> -->
-		<lEchart ref="barChartRef"></lEchart>
+		<!-- 个人资料 -->
+		<view class="mine-data">
+			<view class="mine-data-item" @click="globaTip()">
+				<view class="item-icon">
+					<text class="iconfont icon-gerenziliao"></text>
+				</view>
+				<view class="item-txt">个人资料</view>
+				<view class="item-jiantou">
+					<text class="iconfont icon-xiangyoujiantou"></text>
+				</view>
+			</view>
+			<view class="mine-data-item" @click="globaTip()">
+				<view class="item-icon">
+					<text class="iconfont icon-shezhi"></text>
+				</view>
+				<view class="item-txt">账号设置</view>
+				<view class="item-jiantou">
+					<text class="iconfont icon-xiangyoujiantou"></text>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { onReachBottom, onPullDownRefresh, onPageScroll, onReady } from "@dcloudio/uni-app";
-import * as echarts from "echarts";
-import lEchart from '@/components/l-echart/l-echart.vue'
-// const echarts = require('@/static/js/echarts.min.js')
+// import * as echarts from "echarts"; // echarts_h5
+// import lEchart from '../../component/l-echart/l-echart.vue' // echarts_mini
+import lEchart from '../../uni_modules/lime-echart/components/l-echart/l-echart.vue' // echarts_mini
+const echarts = require('../../static/js/echarts.min.js'); // echarts_mini
 
+// if (systemInfo.hostName == 'WeChat') {
+// 	// import lEchart from '../../component/l-echart/l-echart.vue'
+// 	// const echarts = require('../../static/js/echarts.min.js');
+// } else {
+// 	// import * as echarts from "echarts";
+// }
+let hostName = ref(null)
 let menuList = reactive([
 	{ icon: 'icon-wodexuexi', txt: '我的学习'},
 	{ icon: 'icon-wodejifen', txt: '我的积分'},
@@ -67,6 +93,26 @@ let menuList = reactive([
 const chartRef = ref(null)
 
 const optionData = ref({
+	grid: {
+		top: '24px',
+		bottom: '24px',
+		left: '16px',
+		right: '16px',
+		containLabel: true
+	},
+	tooltip: {
+		trigger: 'item', // 设置触发类型为数据项
+		formatter: function (params) {
+			return `${params.name} 观看: ${params.value} 分钟`; // 自定义提示框内容
+		},
+		backgroundColor: 'rgba(255, 255, 255, 0.8)', // 提示框背景颜色
+		borderColor: 'rgba(0, 0, 0, 0.3)', // 提示框边框颜色
+		borderWidth: 1, // 提示框边框宽度
+		textStyle: {
+		color: '#333', // 提示框文字颜色
+		fontSize: 12 // 提示框文字大小
+		}
+	},
 	xAxis: {
 		type: 'category',
 		data: ['04/01', '04/02', '04/03', '04/04', '04/05', '04/06']
@@ -76,18 +122,49 @@ const optionData = ref({
 	},
 	series: [{
 		type: 'line',
-		data: [120, 110, 340, 301, 230, 110]
+		data: [20, 10, 40, 30, 54, 23]
 	}]
 });
 
-const init = () => {
+// echarts_h5
+const initChart_h5 = () => {
   var myChart = echarts.init(document.getElementById('mine_echarts'));
   var option = optionData.value;
   myChart.setOption(option);
 }
 
+
+// echarts_mini
+const barChartRef = ref({});
+let myChart = null;
+const initChart_mini = () => {
+  if (!barChartRef.value) return
+ 
+  const chartOptions = optionData.value;
+  barChartRef.value.init(echarts, async (chart) => {
+    chart.showLoading()
+    chart.setOption(chartOptions)
+    chart.hideLoading()
+    myChart = chart
+  })
+}
+
+const globaTip = () => {
+	uni.showToast({
+		title: '待开发，敬请期待~',
+		icon: 'error'
+	})
+}
+
 onMounted(() => {
-	init()
+	let systemInfo = uni.getSystemInfoSync();
+	console.log('~~~~~~~~~~~~~~~~~~~~~ systemInfo: ', systemInfo, ',  env: ', systemInfo.hostName)
+	hostName.value = systemInfo.hostName;
+	setTimeout(() => {
+		console.log('barChartRef: ', barChartRef)
+		initChart_mini()
+	}, 1000)
+	
 });
 </script>
 
@@ -190,8 +267,48 @@ onMounted(() => {
 }
 .mine-echarts{
 	width: 100%;
-	height: 200px;
+	height: 240px;
 	background-color: #fff;
-			border-radius: 5px;
+	border-radius: 5px;
+	margin-bottom: 12px;
+}
+
+.mine-data{
+	background-color: #fff;
+	border-radius: 5px;
+	padding: 10px 16px;
+	.mine-data-item{
+		display: flex;
+		line-height: 24px;
+		border-bottom: solid 1px #ebebeb;
+		// padding-bottom: 6px;
+		padding: 10px 0;
+		margin-bottom: 5px;
+		position: relative;
+		&:last-child{
+			border-bottom: none;
+			margin-bottom: 0;
+		}
+		.item-icon{
+			display: inline-block;
+			margin-right: 10px;
+			.iconfont{
+				font-size: 22px;
+				color: #999;
+			}
+		}
+		.item-txt{
+			display: inline-block;
+			font-size: 14px;
+		}
+		.item-jiantou{
+			display: inline-block;
+			position: absolute;
+			right: 0;
+			.iconfont{
+				color: #999;
+			}
+		}
+	}
 }
 </style>

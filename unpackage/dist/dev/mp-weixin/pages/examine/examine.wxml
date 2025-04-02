@@ -1,1 +1,1 @@
-<view></view>
+<view class="examine-wrap"><view class="examine-title-wrap"><text class="iconfont icon-mulu"></text><text class="examine-title">考核类目</text></view><view class="examine-block"><view class="examine-title-mulu-list"><view wx:for="{{a}}" wx:for-item="item" wx:key="e" class="mulu-item"><text class="{{item.a}}"></text><view class="mulu-item-txt">{{item.b}}</view><view class="{{item.d}}">{{item.c}}</view></view></view></view></view>

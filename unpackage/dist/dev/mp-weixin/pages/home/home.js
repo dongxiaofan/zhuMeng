@@ -1,12 +1,9 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-if (!Array) {
-  const _component_uni_popup = common_vendor.resolveComponent("uni-popup");
-  _component_uni_popup();
-}
 const _sfc_main = {
   __name: "home",
   setup(__props) {
+    common_vendor.ref(true);
     let scrollTop = common_vendor.ref(0);
     let screenHeight = common_vendor.ref(0);
     let contHeight = common_vendor.ref(0);
@@ -15,6 +12,7 @@ const _sfc_main = {
     let menuHeight = common_vendor.ref(0);
     let menuFixed = common_vendor.ref(false);
     let showMask = common_vendor.ref(false);
+    const gradientColor = common_vendor.ref("rgba(255, 255, 255, 0)");
     common_vendor.onMounted(() => {
       let query = common_vendor.index.createSelectorQuery();
       query.select(".home-top-menu").boundingClientRect((res) => {
@@ -65,13 +63,13 @@ const _sfc_main = {
       { name: "item_10.jpg", title: "桥梁顶升与支座更换风险提示", pros: 0, cont: "桥梁顶升与支座更换风险提示" }
     ]);
     common_vendor.onPullDownRefresh(() => {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:134", "下拉刷新整个页面");
+      common_vendor.index.__f__("log", "at pages/home/home.vue:137", "下拉刷新整个页面");
       videoList.value = videoList.value.slice(0, 10);
     });
     common_vendor.onReachBottom(() => {
-      common_vendor.index.__f__("log", "at pages/home/home.vue:140", "触底了");
+      common_vendor.index.__f__("log", "at pages/home/home.vue:143", "触底了");
       if (videoList.value.length <= 100) {
-        common_vendor.index.__f__("log", "at pages/home/home.vue:142", "数据复制");
+        common_vendor.index.__f__("log", "at pages/home/home.vue:145", "数据复制");
         videoList.value = [...videoList.value, ...videoList.value];
       }
     });
@@ -82,6 +80,8 @@ const _sfc_main = {
       } else {
         menuFixed.value = false;
       }
+      gradientColor.value = `rgba(0,0,0, ${e.scrollTop}%)`;
+      showMask.value = false;
     });
     const scrollToTop = () => {
       common_vendor.index.pageScrollTo({
@@ -98,17 +98,31 @@ const _sfc_main = {
         title: "已分类"
       });
     };
+    const goDetail = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/detail/detail"
+      });
+    };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.unref(scrollTop) > 600
-      }, common_vendor.unref(scrollTop) > 600 ? {
-        b: common_vendor.o(scrollToTop)
+        a: common_vendor.unref(showMask)
+      }, common_vendor.unref(showMask) ? {
+        b: common_vendor.unref(contHeight) + "px",
+        c: common_vendor.unref(menuFixed) ? "0px" : common_vendor.unref(menuOffsetTop) + "px",
+        d: common_vendor.o(($event) => common_vendor.isRef(showMask) ? showMask.value = false : showMask = false)
       } : {}, {
-        c: common_vendor.unref(menuFixed)
+        e: common_vendor.unref(scrollTop) > 400
+      }, common_vendor.unref(scrollTop) > 400 ? {
+        f: common_vendor.unref(scrollTop) - 400 + "%",
+        g: common_vendor.o(scrollToTop)
+      } : {}, {
+        h: common_vendor.unref(menuFixed)
       }, common_vendor.unref(menuFixed) ? {
-        d: common_vendor.unref(menuHeight) + "px"
+        i: common_vendor.unref(menuHeight) + "px",
+        j: common_vendor.unref(scrollTop) + "%",
+        k: (common_vendor.unref(scrollTop) - common_vendor.unref(menuScrollTop)) * 3 + "%"
       } : {}, {
-        e: common_vendor.f(common_vendor.unref(typeTabList), (type, index, i0) => {
+        l: common_vendor.f(common_vendor.unref(typeTabList), (type, index, i0) => {
           return {
             a: common_vendor.t(type.text),
             b: index,
@@ -116,20 +130,20 @@ const _sfc_main = {
             d: common_vendor.o(($event) => typeBarClick(index), index)
           };
         }),
-        f: common_vendor.o(($event) => chooseType()),
-        g: common_vendor.unref(showMask)
+        m: common_vendor.o(($event) => chooseType()),
+        n: common_vendor.unref(showMask)
       }, common_vendor.unref(showMask) ? {
-        h: common_vendor.o(($event) => chooseTypeOk()),
-        i: common_vendor.o(($event) => chooseTypeOk())
+        o: common_vendor.o(($event) => chooseTypeOk()),
+        p: common_vendor.o(($event) => chooseTypeOk())
       } : {}, {
-        j: common_vendor.n(common_vendor.unref(menuFixed) ? "home-top-menu menu-fixed" : "home-top-menu"),
-        k: common_vendor.f(common_vendor.unref(swiperList), (img, index, i0) => {
+        q: common_vendor.n(common_vendor.unref(menuFixed) ? "home-top-menu menu-fixed" : "home-top-menu"),
+        r: common_vendor.f(common_vendor.unref(swiperList), (img, index, i0) => {
           return {
             a: "/static/images/home_swiper/" + img.name + ".png",
             b: index
           };
         }),
-        l: common_vendor.f(common_vendor.unref(videoList), (item, index, i0) => {
+        s: common_vendor.f(common_vendor.unref(videoList), (item, index, i0) => {
           return common_vendor.e({
             a: "/static/images/home_video_list/" + item.name,
             b: common_vendor.t(item.title),
@@ -141,19 +155,9 @@ const _sfc_main = {
           } : {}, {
             g: item.isNew
           }, item.isNew ? {} : {}, {
-            h: index
+            h: index,
+            i: common_vendor.o(($event) => goDetail(), index)
           });
-        }),
-        m: common_vendor.s(common_vendor.unref(showMask) ? {
-          "height": "100vh",
-          "overflow": "hidden"
-        } : {
-          "height": "100%",
-          "overflow": "auto"
-        }),
-        n: common_vendor.sr("popup", "18cbd92f-0"),
-        o: common_vendor.p({
-          type: "top"
         })
       });
     };
