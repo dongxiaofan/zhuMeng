@@ -72,16 +72,9 @@
 import { ref, reactive, onMounted } from 'vue';
 import { onReachBottom, onPullDownRefresh, onPageScroll, onReady } from "@dcloudio/uni-app";
 // import * as echarts from "echarts"; // echarts_h5
-// import lEchart from '../../component/l-echart/l-echart.vue' // echarts_mini
 import lEchart from '../../uni_modules/lime-echart/components/l-echart/l-echart.vue' // echarts_mini
-const echarts = require('../../static/js/echarts.min.js'); // echarts_mini
+const echarts = require('../../uni_modules/lime-echart/static/echarts.min.js'); // echarts_mini
 
-// if (systemInfo.hostName == 'WeChat') {
-// 	// import lEchart from '../../component/l-echart/l-echart.vue'
-// 	// const echarts = require('../../static/js/echarts.min.js');
-// } else {
-// 	// import * as echarts from "echarts";
-// }
 let hostName = ref(null)
 let menuList = reactive([
 	{ icon: 'icon-wodexuexi', txt: '我的学习'},

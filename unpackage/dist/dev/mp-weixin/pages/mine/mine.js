@@ -8,7 +8,7 @@ const lEchart = () => "../../uni_modules/lime-echart/components/l-echart/l-echar
 const _sfc_main = {
   __name: "mine",
   setup(__props) {
-    const echarts = require("../../static/js/echarts.min.js");
+    const echarts = require("../../uni_modules/lime-echart/static/echarts.min.js");
     let hostName = common_vendor.ref(null);
     let menuList = common_vendor.reactive([
       { icon: "icon-wodexuexi", txt: "我的学习" },
@@ -75,10 +75,10 @@ const _sfc_main = {
     };
     common_vendor.onMounted(() => {
       let systemInfo = common_vendor.index.getSystemInfoSync();
-      common_vendor.index.__f__("log", "at pages/mine/mine.vue:161", "~~~~~~~~~~~~~~~~~~~~~ systemInfo: ", systemInfo, ",  env: ", systemInfo.hostName);
+      common_vendor.index.__f__("log", "at pages/mine/mine.vue:154", "~~~~~~~~~~~~~~~~~~~~~ systemInfo: ", systemInfo, ",  env: ", systemInfo.hostName);
       hostName.value = systemInfo.hostName;
       setTimeout(() => {
-        common_vendor.index.__f__("log", "at pages/mine/mine.vue:164", "barChartRef: ", barChartRef);
+        common_vendor.index.__f__("log", "at pages/mine/mine.vue:157", "barChartRef: ", barChartRef);
         initChart_mini();
       }, 1e3);
     });

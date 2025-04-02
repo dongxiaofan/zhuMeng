@@ -29,13 +29,27 @@
 			{
 				"navigationBarTitleText" : "我的"
 			}
-		},
+		}
+		// {
+		// 	"path" : "pages/detail/detail",
+		// 	"style" : 
+		// 	{
+		// 		"navigationBarTitleText" : "详情"
+		// 	}
+		// }
+	],
+	"subPackages": [
 		{
-			"path" : "pages/detail/detail",
-			"style" : 
-			{
-				"navigationBarTitleText" : "详情"
-			}
+			"root": "subPackage",
+			"name": "subPackage",
+			"pages": [
+				{
+					"path": "pages/detail/detail",
+					  "style": {
+						"navigationBarTitleText": "分包页1"
+					  }
+				}
+			]
 		}
 	],
 	"globalStyle": {
