@@ -1,9 +1,9 @@
 <template>	
-	<view class="" @click="getTop">获取距离</view>
-	<view class="fenlei-mask" style="height: 100%;" v-if="showMask"></view>
-	<scroll-view scroll-y="true" :style="showMask ? {'height': '100vh', 'overflow': 'hidden'} : {'height': '100%', 'overflow': 'auto'} ">
+	<view class="home-wrap">
+		<!-- <view class="fenlei-mask" :style="{'height': (contHeight - menuOffsetTop) + 'px', 'top': menuFixed ? '0px' : menuOffsetTop + 'px'}" v-if="showMask"></view> -->
+		<!-- <view class="fenlei-mask" :style="{'height': '100%', 'top': menuOffsetTop + 'px'}" v-if="showMask" @click="showMask = false"></view> -->
+		<scroll-view scroll-y="true" :style="showMask ? {'height': '100vh', 'overflow': 'hidden'} : {'height': '100%', 'overflow': 'auto'} ">
 		
-		<view class="home-wrap">
 			<view class="home-bacn-top" v-if="scrollTop > 600" @click="scrollToTop">
 				<text class="iconfont icon-huidaodingbu" style="font-size: 20px;"></text>
 			</view>
@@ -15,7 +15,9 @@
 			</view>
 			
 			<!-- 菜单 -->
-			<view class="home-top-menu" ref="homeTopMenuRef">
+			<view :style="{'height': menuHeight+'px'}" v-if="menuFixed"></view>
+			<!-- <view class="home-top-menu" :style="menuFixed ? {'position': 'fixed', 'top': '0', 'width': '100%',, 'background': '#fff'} : {}"> -->
+			<view :class="menuFixed ? 'home-top-menu menu-fixed' : 'home-top-menu'">
 				<scroll-view scroll-x="true" class="type-bar">
 					<view v-for="(type, index) in typeTabList" :key="index" :class="'type-item ' + (currentTypeIndex==index ? 'active' : '')" @click="typeBarClick(index)">
 						<text class="type-text">{{ type.text }}</text>
@@ -31,7 +33,7 @@
 			</view>
 			
 			<!-- 轮播 -->
-			<view class="home-swiper" ref="myElement">
+			<view class="home-swiper">
 				<swiper class="swiper" circular indicator-dots="true" autoplay interval="2000" duration="500" style="height: 200px;">
 					<swiper-item v-for="(img,index) of swiperList" :key="index">
 						<view class="swiper-item">
@@ -51,37 +53,53 @@
 					<view class="item-cont">{{item.cont}}</view>
 					<view class="item-pros" v-if="item.pros > 0">
 						<view class="pros-img">
-							<view class="pros-jd" :style="{ 'width': item.pros + 'px' }"></view>
+							<view class="pros-jd" :style="{ 'width': item.pros + '%' }"></view>
 							<view class="pros-di"></view>
 						</view>
-						<view class="pros-txt">已观看{{item.pros}}%</view>
+						<view class="pros-txt">观看{{item.pros}}%</view>
 					</view>
 					<view class="item-tag-red" v-if="item.isNew">最新</view>
 				</view>
 			</view>
-		</view>
-	</scroll-view>
+		
+		</scroll-view>
+	
+		<uni-popup ref="popup" type="top"></uni-popup>
+	</view>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { onReachBottom, onPullDownRefresh, onPageScroll, onReady } from "@dcloudio/uni-app";
 
-let scrollTop = ref(0);
+let scrollTop = ref(0); // 滚动条位置
+let screenHeight = ref(0); // 设备高度
+// let windowHeight = ref(0); // 页面高度
+let contHeight = ref(0); // 页面高度
+let menuOffsetTop = ref(0); // menu scrollTop + menu height
+let menuScrollTop = ref(0);
+let menuHeight = ref(0);
+let menuFixed = ref(false);
 let showMask = ref(false);
-const homeTopMenuRef = ref(null);
-const myElement = ref(null)
 onMounted(() => {
-	console.log('myElement: ', myElement)
-	// setTimeout()
+	let query = uni.createSelectorQuery();
+	query.select('.home-top-menu').boundingClientRect(res => {
+		menuScrollTop.value = res.top;
+		menuHeight.value = res.height;
+		menuOffsetTop.value = res.top + res.height
+	}).exec();
 	
+	query.select('.home-wrap').boundingClientRect(res => {
+		contHeight.value = res.height;
+	}).exec();
 });
 
-const getTop = () => {
-	// console.log('homeTopMenuRef: ', homeTopMenuRef.value.getBoundingClientRect())
-	// console.log('homeTopMenuRef: ', homeTopMenuRef)
-	console.log('myElement: ', myElement.value.$el)
-}
+onReady(() => {
+	const sysInfo = uni.getSystemInfoSync();
+	screenHeight.value = sysInfo.screenHeight;
+	// windowHeight.value = sysInfo.windowHeight;
+	// console.log('zzzzzzzzzzzzzzzz', sysInfo)
+})
 
 let typeTabList = reactive([
 	{ text: '首页', key: 0 },	{ text: '公路养护', key: 1 },	{ text: '风险提示', key: 2 },	{ text: '作业要点', key: 3 },	{ text: '平安工地', key: 4 },	{ text: '技术交流', key: 5 },	{ text: '三卡学习', key: 6 },	{ text: '三级安全教育', key: 7 },	{ text: '作业指导书', key: 8 },	{ text: '技能学习',key: 9 },
@@ -126,13 +144,16 @@ onReachBottom(() => {
 	}
 })
 
-onReady(() => {
-	console.log('2 myElement: ', myElement)
-})
-
 // 滚动监听
 onPageScroll((e) => {
-	scrollTop.value = e.scrollTop
+	scrollTop.value = e.scrollTop;
+	// console.log('e.scrollTop: ', e.scrollTop)
+	if (e.scrollTop >= menuScrollTop.value) {
+		// console.log('顶部菜单栏可以固定了')
+		menuFixed.value = true;
+	} else {
+		menuFixed.value = false;
+	}
 })
 
 // 返回顶部
@@ -144,7 +165,8 @@ const scrollToTop = () => {
 }
 
 const chooseType = () => {
-	showMask.value = true
+	showMask.value = true;
+	
 }
 
 const chooseTypeOk = () => {
@@ -178,7 +200,6 @@ const chooseTypeOk = () => {
 .home-search{
 	padding: 10px;
 	height: 34px;
-	margin-bottom: 10px;
 	.search-input{
 		width: calc(100% - 58px);
 		height: 34px;
@@ -203,8 +224,17 @@ const chooseTypeOk = () => {
 	}
 }
 .home-top-menu{
-	padding: 0 10px;
+	padding: 10px 10px 0px 10px;
 	position: relative;
+	box-sizing: border-box;
+	&.menu-fixed{
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		background-color: #fbfbfb;
+		z-index: 9;
+	}
 	.type-bar {
 		display: flex;
 		flex-direction: row;
@@ -249,15 +279,15 @@ const chooseTypeOk = () => {
 		color: #999;
 		border-left: solid 1px #ebebeb;
 		position: absolute;
-		top: 0;
+		top: 10px;
 		right: 0;
 	}
 	.fenlei-cont{
-		width: 20%;
+		width: 24%;
 		background-color: #fff;
 		position: absolute;
 		right: 10px;
-		top: 30px;
+		top: 40px;
 		z-index: 10;
 		padding: 10px;
 		border-radius: 5px;
@@ -342,7 +372,7 @@ const chooseTypeOk = () => {
 			padding: 0 10px;
 			box-sizing: border-box;
 			.pros-img{
-				width: 55%;
+				width: 50%;
 				display: inline-block;
 				position: relative;
 				.pros-di{
@@ -367,10 +397,11 @@ const chooseTypeOk = () => {
 				}
 			}
 			.pros-txt{
-				width: 45%;
+				width: 50%;
 				display: inline-block;
 				line-height: 24px;
 				text-align: right;
+				font-size: 12px;
 			}
 		}
 		.item-tag-red{
